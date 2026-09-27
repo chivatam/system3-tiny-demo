@@ -118,6 +118,13 @@ Acceptance criteria:
 - [x] State the implementation limits: one writer, bounded foreground work, exact/context-key retrieval, no runtime weight training, and no OS sandbox claim.
 - [x] A five-minute walkthrough shows failure → discovery → verified success → restart reuse → drift repair → guardian rejection.
 
+## Completion evidence
+
+- `npm test`: TypeScript checking and 14 Node tests, including real Pi hooks with a scripted provider, cancellation, guardian enforcement, verifier tampering, memory integrity, and CLI budget forwarding.
+- `python3 -m unittest -v test_system3`: all five baseline checks pass.
+- `npm run demo`: all eight fresh-process offline scenarios and three negative checks pass.
+- `npm run demo:live`: all eight Fireworks GLM 5.3 Flash scenarios pass. [Measured live evidence](evidence/pi-live-2026-09-27.json) and [interpretation](pi-system3.md#observed-live-result--2026-09-27).
+
 ## Definition of done
 
 The runnable showcase produces measured traces for first encounter, restart reuse, fixture drift, and a forbidden action. Objective checks determine success and whether knowledge is persisted. The Pi runtime, supervisor limits, model settings, and comparison conditions are recorded. The original Python demo and tests remain usable.

@@ -39,7 +39,7 @@ npm start -- --field workspace --destination archive --state .system3-pi/live-me
 
 Each command starts a new process and fixture. The second can recall the first run's lesson; the third must adapt it to `workspace`. The full `demo:live` comparison also runs three deterministic offline probes for guardian rejection, repair-budget exhaustion, and a false completion claim.
 
-Allow **about five minutes** for a successful full live comparison. By default, live mode waits **6,500 ms before every model request, including the first**. This conservative spacing accommodates accounts limited to 10 requests per minute; it does not identify your account's billing or quota state. Fireworks limits are shared across account activity, so another workload can still cause HTTP 429. Check your actual allowance in the [official account quota guide](https://docs.fireworks.ai/guides/quotas_usage/account-quotas).
+Allow **about six minutes** for a successful full live comparison. By default, live mode waits **6,500 ms before every model request, including the first**. This conservative spacing accommodates accounts limited to 10 requests per minute; it does not identify your account's billing or quota state. Fireworks limits are shared across account activity, so another workload can still cause HTTP 429. Check your actual allowance in the [official account quota guide](https://docs.fireworks.ai/guides/quotas_usage/account-quotas).
 
 If your account permits a higher rate, lower the delay for an individual run or a whole comparison. Choose the command you need:
 
@@ -152,6 +152,19 @@ The creed is trusted application configuration, not editable learned memory:
 The application disables ambient Pi extensions, skills, prompt templates, context files, and default host tools. Only its explicit fixture tools are enabled. The guardian reviews actions before execution, and allowed tool handlers repeat input checks. Cached advice cannot authorize a new tool or change the creed.
 
 Goal ranking uses a fixed `0.7 × task progress + 0.3 × useful learning` score over a few candidates. It is an inspectable prototype rule, not a trained reward model or full tree search. `agent_before_settle` provides the bounded verification/repair boundary; `agent_settled` marks final completion. An intermediate `agent_end` is not treated as final success.
+
+## Observed live result — 2026-09-27
+
+All eight live tasks passed with Fireworks GLM 5.3 Flash. The three offline negative checks passed too. The [saved measurements and event traces](evidence/pi-live-2026-09-27.json) contain each row's calls, token usage, estimated cost, verification, guardian decisions, and Pi hook counts.
+
+| Scenario | Persistent tools / model calls | Fresh-memory tools / model calls |
+| --- | ---: | ---: |
+| First encounter | 5 / 5 | 5 / 5 |
+| Fresh process repeat | 3 / 4 | 5 / 5 |
+| Contract drift | 6 / 7 | 5 / 5 |
+| Restart + changed preference | 6 / 7 | 5 / 5 |
+
+The first repeat benefited from memory. Drift required replacing stale advice, and the last run did extra verification despite retrieving the correct mapping. Total tool calls were equal (20 each); model calls were 23 versus 20. These observations validate the persistence/repair mechanism and **do not establish an overall efficiency improvement**. The eight live rows used 25,952 reported tokens; Pi estimated $0.0041385 from its catalog rates. This is one sample, not an invoice or benchmark result.
 
 ## What the measurements mean
 
