@@ -1,5 +1,7 @@
 # System 3, tiny
 
+[![Tests](https://github.com/chivatam/system3-tiny-demo/actions/workflows/tests.yml/badge.svg)](https://github.com/chivatam/system3-tiny-demo/actions/workflows/tests.yml)
+
 ```sh
 git clone https://github.com/chivatam/system3-tiny-demo.git
 cd system3-tiny-demo
@@ -61,8 +63,22 @@ State supports one writer at a time. There is no autonomous background process; 
 ## Check it
 
 ```sh
-python3 -m unittest discover -v
+python3 -m unittest -v test_system3
 ```
+
+GitHub Actions runs the tests on Python 3.10 and 3.13 for pushes to `main` and pull requests. No dependencies or credentials are needed.
+
+## Pi + System 3 roadmap
+
+The next phase adds a small System 3 supervisor around the Pi SDK, with guarded actions, bounded repair, and verified experience shared across sessions. **This integration is planned; the runnable code above remains the Python simulation.**
+
+Start with the [seven-task sprint plan](docs/pi-system3-sprint-1.md), including estimates, dependencies, and acceptance criteria.
+
+| Editable architecture | What it describes |
+| --- | --- |
+| [System 3 / Sophia](https://excalidraw.com/#json=RDl5D07IB2YGJrL85ciFy,nr0SS6y8ylkPCH0ChRUMHw) | The paper's supervision, memory, and reflection layers. |
+| [Pi agent](https://excalidraw.com/#json=FN6Ug1hqWZdFnAyyjBDUa,w9AX4MQ6CcdPnRl_KRlGEg) | Pi's existing sessions, model loop, tools, and extension hooks. |
+| [Pi + System 3](https://excalidraw.com/#json=CzPv1itqa7hSmurBmllEZ,yp9mEHGwu_zX3174TYaomw) | The proposed supervisor and cross-session experience store. |
 
 ## Source
 
