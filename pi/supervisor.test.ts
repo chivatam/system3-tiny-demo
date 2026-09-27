@@ -20,6 +20,15 @@ test('real Pi hooks verify, recall, invalidate drift, and apply an explicit new 
   assert.equal(cold.testFailures, 1);
   assert.equal(cold.repairs, 1);
   assert.equal(cold.recalledField, undefined);
+  assert.deepEqual(cold.trace.map(e => e.seq), cold.trace.map((_, i) => i + 1));
+  const edit = cold.trace.find(e => e.event === 'code_changed')!;
+  assert.match(String(edit.before), /folder/);
+  assert.match(String(edit.after), /collection/);
+  const failedCheck = cold.trace.find(e => e.event === 'verification' && !e.ok)!;
+  assert.equal((failedCheck.checks as unknown[]).length, 4);
+  assert.ok(cold.trace.some(e => e.event === 'tool_requested' && e.input));
+  assert.ok(cold.trace.some(e => e.event === 'context_prepared' && e.systemPrompt));
+  assert.ok(cold.trace.some(e => e.event === 'memory_saved' && e.promoted));
   for (const name of ['before_agent_start', 'context', 'before_provider_request', 'tool_call', 'tool_result', 'turn_end', 'agent_end', 'agent_before_settle', 'agent_settled']) {
     assert.ok(cold.hooks[name] > 0, `Actual Pi hook did not run: ${name}`);
   }
@@ -33,6 +42,7 @@ test('real Pi hooks verify, recall, invalidate drift, and apply an explicit new 
   assert.equal(changed.success, true, JSON.stringify(changed));
   assert.equal(changed.recalledField, 'collection');
   assert.equal(changed.testFailures, 1);
+  assert.ok(changed.trace.some(e => e.event === 'memory_invalidated'));
   assert.equal(loadMemory(current.options.state).procedure?.field, 'workspace');
   const preference = await current.run({ field: 'workspace', destination: 'new research' });
   assert.equal(preference.success, true, JSON.stringify(preference));
@@ -47,6 +57,13 @@ test('real Pi hooks verify, recall, invalidate drift, and apply an explicit new 
   for (const candidate of selectGoal(true).candidates) {
     assert.equal(candidate.score, Number((0.7 * candidate.external + 0.3 * candidate.intrinsic).toFixed(2)));
   }
+});
+
+test('trace observers cannot change execution or its saved evidence', async t => {
+  const result = await task(t).run({ onEvent: event => { event.event = 'stop'; event.seq = 999; throw new Error('broken observer'); } });
+  assert.equal(result.success, true);
+  assert.equal(result.trace[0].event, 'run_started');
+  assert.equal(result.trace[0].seq, 1);
 });
 
 test('completion claims and provider errors cannot promote an unverified procedure', { timeout: 10_000 }, async t => {

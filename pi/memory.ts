@@ -2,27 +2,8 @@ import fs from 'node:fs';
 import { dirname, join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 
-export type VerifiedField = 'collection' | 'workspace';
-export type Evidence = {
-  cases: number;
-  field: VerifiedField;
-  destination: string;
-  sentinelPreserved: true;
-};
-export type Procedure = { contextKey: 'notes-create/v1'; field: VerifiedField; evidence: Evidence };
-export type Episode = {
-  taskId: string;
-  outcome: 'passed' | 'failed' | 'blocked' | 'budget';
-  testFailures: number;
-  toolCalls: number;
-};
-export type Memory = {
-  version: 1;
-  preference: { destination: string };
-  capability: { status: 'unknown' | 'needs_repair' | 'verified'; evidence?: Evidence };
-  procedure?: Procedure;
-  episodes: Episode[];
-};
+import type { Memory, Evidence, Episode, Procedure } from './memory-types.ts';
+export type { VerifiedField, Evidence, Procedure, Episode, Memory } from './memory-types.ts';
 
 function invalid(field: string): never {
   throw new Error(`Invalid memory (${field}); preserve the file and repair it or choose a new state path.`);

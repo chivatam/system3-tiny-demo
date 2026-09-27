@@ -7,17 +7,32 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "test": "tsc && node --test pi/*.test.ts",
+    "test": "tsc && tsc -p ui/tsconfig.json && node --test pi/*.test.ts",
     "demo": "node pi/cli.ts demo --offline",
     "demo:live": "node pi/cli.ts demo",
-    "start": "node pi/cli.ts run"
+    "start": "node pi/cli.ts run",
+    "build": "tsc -p ui/tsconfig.json && vite build",
+    "ui": "node pi/server.ts",
+    "ui:dev": "vite",
+    "test:ui": "playwright test",
+    "format:check": "prettier --check \"ui/**/*.{ts,tsx,css,html}\" vite.config.ts playwright.config.ts \"e2e/*.ts\""
   },
   "dependencies": {
     "@earendil-works/pi-ai": "0.87.1",
-    "@earendil-works/pi-coding-agent": "0.87.1"
+    "@earendil-works/pi-coding-agent": "0.87.1",
+    "lucide-react": "1.48.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
     "@types/node": "24.19.0",
-    "typescript": "7.0.2"
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.1",
+    "prettier": "3.9.9",
+    "typescript": "7.0.2",
+    "vite": "8.3.1"
   }
 }

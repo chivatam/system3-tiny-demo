@@ -2,6 +2,26 @@
 
 [![Tests](https://github.com/chivatam/system3-tiny-demo/actions/workflows/tests.yml/badge.svg)](https://github.com/chivatam/system3-tiny-demo/actions/workflows/tests.yml)
 
+## Open the agent observatory
+
+With **Node.js 24+**, run from this repository:
+
+```sh
+npm ci
+npm run build
+npm run ui
+```
+
+Open **[127.0.0.1:4317](http://127.0.0.1:4317)**. Choose **First repair → Run agent**, then select **Independent checks failed**, **Diagnose before retrying**, or **The solution was edited** in the trace. You see actual tool inputs/results, before/after code, verifier expectations, controller scores, and memory at that exact point in the run.
+
+Continue with **Reuse a lesson**, **Contract drift**, and **Test the guardian** to see recall, invalidation, and blocked actions. Replay never runs tools again. Scripted mode uses real Pi hooks without network calls; select **Fireworks · GLM 5.3 Flash** for live model decisions using the existing Git-ignored `.env` key. Runs are saved locally and survive server restarts.
+
+**Toward Sophia** explains what is still missing, particularly autonomous curiosity. The [implementation roadmap](docs/persistent-assistant-roadmap.md) maps the research mechanisms to concrete work and evidence gates for a persistent assistant.
+
+For frontend development, leave the API server running and start `npm run ui:dev`. For browser checks: `npx playwright install chromium && npm run build && npm run test:ui`. See the [runbook](docs/pi-system3.md#browser-observatory) for storage, boundaries, and testing.
+
+## Original Python simulation
+
 ```sh
 git clone https://github.com/chivatam/system3-tiny-demo.git
 cd system3-tiny-demo

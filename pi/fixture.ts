@@ -69,6 +69,7 @@ export function inspectContract(root: string, field: Field): { destinationField:
 export type Verification = {
   ok: boolean;
   error?: string;
+  checks?: { input: { text: string; destination: string }; expected: Record<string, string>; actual: unknown; passed: boolean }[];
   evidence?: { cases: number; field: Field; destination: string; sentinelPreserved: boolean };
 };
 
@@ -87,8 +88,10 @@ export async function verifyFixture(root: string, field: Field, destination: str
     ], { cwd: path, env: {}, timeout: 2000, killSignal: 'SIGKILL', maxBuffer: 64 * 1024, encoding: 'utf8' });
     if (readRegular(join(path, 'sentinel.txt')) !== sentinel) return { ok: false, error: 'Protected sentinel changed' };
     const expected = cases.map(([text, target]) => ({ text, [field]: target }));
-    if (!isDeepStrictEqual(JSON.parse(stdout), expected)) return { ok: false, error: 'Invalid payload: inspect the current contract and repair solution.cjs' };
-    return { ok: true, evidence: { cases: cases.length, field, destination, sentinelPreserved: true } };
+    const actual = JSON.parse(stdout);
+    const checks = cases.map(([text, target], i) => ({ input: { text, destination: target }, expected: expected[i], actual: actual[i], passed: isDeepStrictEqual(actual[i], expected[i]) }));
+    if (!isDeepStrictEqual(actual, expected)) return { ok: false, checks, error: 'Invalid payload: inspect the current contract and repair solution.cjs' };
+    return { ok: true, checks, evidence: { cases: cases.length, field, destination, sentinelPreserved: true } };
   } catch {
     return { ok: false, error: 'Verification failed: invalid fixture, candidate error, forbidden access, or execution limit' };
   }

@@ -10,6 +10,28 @@ Run these commands from the repository root with **Node.js 24 or newer**. The or
 
 This prototype uses Pi **0.87.1** to repair a small JavaScript function. A System 3 supervisor chooses diagnostic work after failure, checks tool actions, verifies the result, and saves a proven field mapping for a later process. It demonstrates selected mechanisms from Sophia; it is not a reproduction of the paper's experiments.
 
+## Browser observatory
+
+Run `npm run build`, then `npm run ui`, and open [http://127.0.0.1:4317](http://127.0.0.1:4317). The React/TypeScript frontend is served by a loopback-only Node server. Vite handles the production build. `npm run ui:dev` adds frontend hot reload with API requests proxied to port 4317.
+
+1. Run **First repair** in scripted mode (about 4 seconds). Select the failed verification to compare expected and returned payloads.
+2. Select **Diagnose before retrying** for the exact controller candidates and scores. Select **The solution was edited** for the real before/after contents.
+3. Run **Reuse a lesson** with shared memory. Every run starts a fresh OS process; only the external memory persists. Run **Contract drift** to see a previously verified lesson invalidated.
+4. Select **Fireworks · GLM 5.3 Flash** for the live model (typically 40–90 seconds). The server loads the same `.env`; only a key-configured boolean reaches the browser. The guardian probe is scripted only.
+5. Use the replay controls, filters, run history, or JSON download to inspect a past run. **Stop run** aborts ongoing work. Refreshing the browser does not cancel the worker; reconnecting recovers the saved trace.
+
+The shared-memory **First repair** scenario begins a new learning journey without deleting previous records. Later scenarios reuse the most recent journey for the selected execution mode. Live and scripted memories are separate. **Fresh memory for this run** never imports a shared lesson. Prefer running scenarios in order; a recall scenario without an earlier lesson honestly starts cold.
+
+The UI shows observable execution, explicit application decisions, and model response text. It does not reconstruct private model reasoning. The initial system/task prompts are shown alongside the subsequent tool observations. Host verification details are observer-only; the tool gives the model its original, narrower result.
+
+Data lives in `.system3-pi/observatory/`: `records/` holds versioned event streams, `memory/` holds journey memories, `artifacts/` holds fixtures/reports, and `journeys.json` identifies the current journey per mode. This is a single-user, single-writer local prototype. There is no server authentication or production isolation; do not publish or proxy it publicly. Disk records are retained until explicitly removed; no retention service is running. The node test server uses temporary directories; browser tests use the separate ignored `.system3-pi/browser-tests/` directory and cannot call Fireworks.
+
+`npm test` checks types, runtime behavior, trace integrity, local API validation, fresh-worker isolation, memory boundaries, cancellation, and durable replay. `npm run build && npm run test:ui` checks the browser flows, keyboard controls, mobile overflow, and automated accessibility with Playwright/axe. Install its browser once with `npx playwright install chromium`. CI installs Chromium with its OS dependencies.
+
+The [saved live observatory run](evidence/observatory-live-2026-09-27.json) completed with GLM 5.3 Flash in 36.0 seconds: five model calls, five allowed tool calls, one failed verification followed by repair, and 45 observable events. This is one functional smoke test, not a claim of general learning improvement.
+
+See [the persistent-assistant roadmap](persistent-assistant-roadmap.md) for the curiosity mechanism and the coverage map. The current fixed score is a controller heuristic, not an implementation of autonomous curiosity.
+
 ## Choose offline or live execution
 
 | Command | What runs | Credentials |

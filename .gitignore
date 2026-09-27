@@ -6,3 +6,6 @@ __pycache__/
 .DS_Store
 node_modules/
 .system3-pi/
+dist/
+playwright-report/
+test-results/
