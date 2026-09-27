@@ -1,0 +1,23 @@
+{
+  "name": "pi-system3-tiny",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "test": "tsc && node --test pi/*.test.ts",
+    "demo": "node pi/cli.ts demo --offline",
+    "demo:live": "node pi/cli.ts demo",
+    "start": "node pi/cli.ts run"
+  },
+  "dependencies": {
+    "@earendil-works/pi-ai": "0.87.1",
+    "@earendil-works/pi-coding-agent": "0.87.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.0",
+    "typescript": "7.0.2"
+  }
+}

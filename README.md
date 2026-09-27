@@ -68,17 +68,27 @@ python3 -m unittest -v test_system3
 
 GitHub Actions runs the tests on Python 3.10 and 3.13 for pushes to `main` and pull requests. No dependencies or credentials are needed.
 
-## Pi + System 3 roadmap
+## Run Pi + System 3
 
-The next phase adds a small System 3 supervisor around the Pi SDK, with guarded actions, bounded repair, and verified experience shared across sessions. **This integration is planned; the runnable code above remains the Python simulation.**
+The TypeScript demo runs **Pi 0.87.1** with a small supervisor, guarded tools, independent verification, and memory shared across fresh processes. Pi edits a real `solution.cjs` fixture. Offline mode supplies scripted model responses through Pi's actual session and tool loop; live mode uses Fireworks **GLM 5.3 Flash**.
 
-Start with the [seven-task sprint plan](docs/pi-system3-sprint-1.md), including estimates, dependencies, and acceptance criteria.
+With **Node.js 24+** and npm:
+
+```sh
+npm ci
+npm test
+npm run demo
+```
+
+For the live comparison, save `FIREWORKS_API_KEY=your_key` in the Git-ignored repository-root `.env`, then run `npm run demo:live`. The launcher loads `.env` using Node's native loader. Live runs make paid model calls and may produce different results from the offline script.
+
+Read the [Pi setup and five-minute walkthrough](docs/pi-system3.md) for single-task commands, memory and audit files, limits, and failure probes. The original [seven-task sprint plan](docs/pi-system3-sprint-1.md) records the intended scope. This prototype does not implement production deployment or video generation.
 
 | Editable architecture | What it describes |
 | --- | --- |
 | [System 3 / Sophia](https://excalidraw.com/#json=RDl5D07IB2YGJrL85ciFy,nr0SS6y8ylkPCH0ChRUMHw) | The paper's supervision, memory, and reflection layers. |
 | [Pi agent](https://excalidraw.com/#json=FN6Ug1hqWZdFnAyyjBDUa,w9AX4MQ6CcdPnRl_KRlGEg) | Pi's existing sessions, model loop, tools, and extension hooks. |
-| [Pi + System 3](https://excalidraw.com/#json=CzPv1itqa7hSmurBmllEZ,yp9mEHGwu_zX3174TYaomw) | The proposed supervisor and cross-session experience store. |
+| [Pi + System 3](https://excalidraw.com/#json=CzPv1itqa7hSmurBmllEZ,yp9mEHGwu_zX3174TYaomw) | The design behind the prototype's supervisor and cross-session experience store. |
 
 ## Source
 
